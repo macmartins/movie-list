@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { COLORS } from "../variables/colors";
+import { useEffect, useState } from "react";
 
 const CustomTableCell = styled(TableCell)({
   color: COLORS.tableHead,
@@ -18,6 +19,19 @@ const CustomTableCell = styled(TableCell)({
 
 export default function MovieList() {
   const theme = useTheme();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch("/api2")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => setData(data.message))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
   return (
     <Box sx={{ my: 3 }}>
       <Typography
