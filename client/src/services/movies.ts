@@ -18,27 +18,23 @@ export const moviesApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "/api/" }),
   tagTypes: ["Movies"],
   endpoints: (builder) => ({
-    listMovies: builder.query<ListResponse<Movie>, number | void>({
-      query: (page = 1) => `movies?page=${page}&limit=10`,
+    listMovies: builder.query<
+      ListResponse<Movie>,
+      { page: number; sort?: string; reset?: boolean }
+    >({
+      query: ({ page, sort }) =>
+        `movies?page=${page ?? 1}&limit=10${sort ? `&sort=${sort}` : ""}`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
-      merge: (currentCache, newItems) => {
+      merge: (currentCache, newItems, { arg: { reset } }) => {
+        if (reset) currentCache.result = [];
         currentCache.result.push(...newItems.result);
       },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.result.map(({ id }) => ({
-                type: "Movies" as const,
-                id,
-              })),
-              { type: "Movies", id: "PARTIAL-LIST" },
-            ]
-          : [{ type: "Movies", id: "PARTIAL-LIST" }],
+      providesTags: () => [{ type: "Movies", id: "PARTIAL-LIST" }],
     }),
   }),
 });

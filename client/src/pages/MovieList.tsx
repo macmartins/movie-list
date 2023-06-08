@@ -8,6 +8,7 @@ import {
   TableCell,
   TableBody,
   CircularProgress,
+  Button,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { COLORS } from "../variables/colors";
@@ -22,9 +23,16 @@ const CustomTableCell = styled(TableCell)({
 
 export default function MovieList() {
   const tableEl = useRef<HTMLDivElement | null>(null);
-  const [page, setPage] = useState(1);
   const [distanceBottom, setDistanceBottom] = useState(0);
-  const { data: movies, isFetching } = useListMoviesQuery(page);
+  const [page, setPage] = useState(1);
+  const [sort, setSort] = useState("title:1");
+  const [reset, setReset] = useState(false);
+  const { data: movies, isFetching } = useListMoviesQuery({
+    page,
+    sort,
+    reset,
+  });
+
   const theme = useTheme();
 
   const scrollListener = useCallback(() => {
@@ -38,11 +46,14 @@ export default function MovieList() {
       if (
         tableEl.current.scrollTop > bottom - distanceBottom &&
         page < Number(movies?.totalPages) &&
+        sort.includes("title") &&
         !isFetching
-      )
+      ) {
         setPage(page + 1);
+        setReset(false);
+      }
     }
-  }, [distanceBottom, page, movies?.totalPages, isFetching]);
+  }, [distanceBottom, page, movies?.totalPages, sort, isFetching]);
 
   useLayoutEffect(() => {
     const tableRef = tableEl.current;
@@ -51,6 +62,12 @@ export default function MovieList() {
       tableRef?.removeEventListener("scroll", scrollListener);
     };
   }, [scrollListener]);
+
+  const handleTop10RevenueClick = () => {
+    setReset(true);
+    setPage(1);
+    setSort("revenue:-1");
+  };
 
   return (
     <Box sx={{ my: 3 }}>
@@ -69,6 +86,16 @@ export default function MovieList() {
           {isFetching && <CircularProgress size={20} />}
         </Box>
       </Typography>
+      <Button onClick={handleTop10RevenueClick}>Top 10 Revenue</Button>
+      <Button
+        onClick={() => {
+          setReset(true);
+          setPage(1);
+          setSort("title:1");
+        }}
+      >
+        Top 10 Revenue by Year
+      </Button>
       <TableContainer ref={tableEl} sx={{ maxHeight: "40vh" }}>
         <Table stickyHeader>
           <TableHead>
