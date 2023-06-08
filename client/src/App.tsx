@@ -2,21 +2,25 @@ import { Box, ThemeProvider } from "@mui/material";
 import MovieList from "./pages/MovieList";
 import theme from "./theme";
 import AppBar from "./components/AppBar/AppBar";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 function App() {
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <AppBar />
-        <Box
-          sx={{
-            margin: "0 auto",
-            maxWidth: 1280,
-          }}
-        >
-          <MovieList />
-        </Box>
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <AppBar />
+          <Box
+            sx={{
+              margin: "0 auto",
+              maxWidth: 1280,
+            }}
+          >
+            <MovieList />
+          </Box>
+        </ThemeProvider>
+      </Provider>
     </>
   );
 }

@@ -4,12 +4,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2",
+    "node-fetch": "^3.3.1"
   },
   "scripts": {
     "start": "node server/index.js"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/macmartins/movie-list.git"

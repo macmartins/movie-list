@@ -6,31 +6,51 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  TableBody,
+  CircularProgress,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { COLORS } from "../variables/colors";
-import { useEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useListMoviesQuery } from "../services/movies";
 
 const CustomTableCell = styled(TableCell)({
   color: COLORS.tableHead,
   borderBottom: `1px solid ${COLORS.tableHead}60`,
-  padding: 0,
+  paddingBottom: 0,
 });
 
 export default function MovieList() {
+  const tableEl = useRef<HTMLDivElement | null>(null);
+  const [page, setPage] = useState(1);
+  const [distanceBottom, setDistanceBottom] = useState(0);
+  const { data: movies, isFetching } = useListMoviesQuery(page);
   const theme = useTheme();
-  const [data, setData] = useState(null);
 
-  useEffect(() => {
-    fetch("/api2")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => setData(data.message))
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+  const scrollListener = useCallback(() => {
+    if (tableEl.current) {
+      const bottom =
+        tableEl.current.scrollHeight - tableEl.current.clientHeight;
+
+      if (!distanceBottom) {
+        setDistanceBottom(Math.round(bottom * 0.01));
+      }
+      if (
+        tableEl.current.scrollTop > bottom - distanceBottom &&
+        page < Number(movies?.totalPages) &&
+        !isFetching
+      )
+        setPage(page + 1);
+    }
+  }, [distanceBottom, page, movies?.totalPages, isFetching]);
+
+  useLayoutEffect(() => {
+    const tableRef = tableEl.current;
+    tableRef?.addEventListener("scroll", scrollListener);
+    return () => {
+      tableRef?.removeEventListener("scroll", scrollListener);
+    };
+  }, [scrollListener]);
 
   return (
     <Box sx={{ my: 3 }}>
@@ -41,21 +61,47 @@ export default function MovieList() {
           my: 3,
         }}
       >
-        Movie ranking
+        <Box
+          component="span"
+          sx={{ display: "flex", alignItems: "center", gap: "10px" }}
+        >
+          Movie ranking
+          {isFetching && <CircularProgress size={20} />}
+        </Box>
       </Typography>
-      <TableContainer>
-        <Table>
+      <TableContainer ref={tableEl} sx={{ maxHeight: "40vh" }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <CustomTableCell sx={{ paddingLeft: 1, maxWidth: "1px" }}>
-                Ranking
-              </CustomTableCell>
-              <CustomTableCell sx={{ maxWidth: 20 }}>Title</CustomTableCell>
-              <CustomTableCell sx={{ maxWidth: 15 }}>Year</CustomTableCell>
-              <CustomTableCell sx={{ maxWidth: 30 }}>Revenue</CustomTableCell>
+              <CustomTableCell sx={{ maxWidth: 1 }}>Ranking</CustomTableCell>
+              <CustomTableCell>Title</CustomTableCell>
+              <CustomTableCell>Year</CustomTableCell>
+              <CustomTableCell>Revenue</CustomTableCell>
               <CustomTableCell></CustomTableCell>
             </TableRow>
           </TableHead>
+          <TableBody>
+            {movies?.result?.map((row, i) => (
+              <TableRow
+                key={`movie-${i}`}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {i + 1}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {row.title}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {new Date(row.release_date).getFullYear()}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  ${row.revenue?.toLocaleString("en-US")}
+                </TableCell>
+                <TableCell component="th" scope="row"></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
     </Box>
