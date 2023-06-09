@@ -9,6 +9,8 @@ import {
   TableBody,
   CircularProgress,
   Button,
+  Backdrop,
+  Popover,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { COLORS } from "../variables/colors";
@@ -29,6 +31,9 @@ export default function MovieList() {
   const [distanceBottom, setDistanceBottom] = useState(0);
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState("title:1");
+  const [year, setYear] = useState<number>();
+  const [isSelectYearOpen, setIsSelectYearOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   // Normal listing
   const { data: allMovies, isFetching } = useListMoviesQuery({
     page,
@@ -76,8 +81,22 @@ export default function MovieList() {
     };
   }, [scrollListener]);
 
-  const handleTop10RevenueClick = () => {
+  const handleTop10RevenueClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     setSort("revenue:-1");
+    setIsSelectYearOpen(true);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const getYears = (startYear = 1980) => {
+    const currentYear = new Date().getFullYear(),
+      years = [];
+    startYear = startYear || 1980;
+    while (startYear <= currentYear) {
+      years.push(startYear++);
+    }
+    return years;
   };
 
   return (
@@ -97,6 +116,63 @@ export default function MovieList() {
           {isFetching && <CircularProgress size={20} />}
         </Box>
       </Typography>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isSelectYearOpen}
+        onClick={() => setIsSelectYearOpen(false)}
+      >
+        <Popover
+          open={isSelectYearOpen}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              minWidth: 200,
+              textAlign: "center",
+              paddingTop: 2,
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                color: COLORS.buttonTextOpacity,
+                pb: 1,
+                fontSize: 14,
+              }}
+            >
+              Select a year
+            </Typography>
+            {getYears(1900).reverse().map((year) => (
+              <Typography
+                variant="body1"
+                sx={{
+                  color: COLORS.tableText,
+                  fontSize: 20,
+                  fontFamily: "'Roboto Medium', sans-serif",
+                  cursor: "pointer",
+                  lineHeight: 1.8,
+                  "&:hover": {
+                    backgroundColor: COLORS.tableSeparator,
+                  },
+                }}
+                onClick={() => setYear(year)}
+              >
+                {year}
+              </Typography>
+            ))}
+          </Box>
+        </Popover>
+      </Backdrop>
       <Button onClick={handleTop10RevenueClick}>Top 10 Revenue</Button>
       <Button
         onClick={() => {
