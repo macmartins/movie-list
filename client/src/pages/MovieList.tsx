@@ -41,7 +41,7 @@ export default function MovieList() {
         tableEl.current.scrollHeight - tableEl.current.clientHeight;
 
       if (!distanceBottom) {
-        setDistanceBottom(Math.round(bottom * 0.01));
+        setDistanceBottom(Math.round(bottom * 0.2));
       }
       if (
         tableEl.current.scrollTop > bottom - distanceBottom &&
@@ -53,7 +53,9 @@ export default function MovieList() {
         setReset(false);
       }
     }
-  }, [distanceBottom, page, movies?.totalPages, sort, isFetching]);
+    // Add the ignore because there's a bug where if page is a dependency, it will setPage x2
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [distanceBottom, movies?.totalPages, sort, isFetching]);
 
   useLayoutEffect(() => {
     const tableRef = tableEl.current;

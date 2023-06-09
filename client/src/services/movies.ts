@@ -20,10 +20,10 @@ export const moviesApi = createApi({
   endpoints: (builder) => ({
     listMovies: builder.query<
       ListResponse<Movie>,
-      { page: number; sort?: string; reset?: boolean }
+      { page: number; sort: string; reset?: boolean }
     >({
       query: ({ page, sort }) =>
-        `movies?page=${page ?? 1}&limit=10${sort ? `&sort=${sort}` : ""}`,
+        `movies?page=${page ?? 1}&limit=10&sort=${sort}`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
@@ -34,7 +34,7 @@ export const moviesApi = createApi({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
-      providesTags: () => [{ type: "Movies", id: "PARTIAL-LIST" }],
+      providesTags: () => [{ type: "Movies", id: `PARTIAL-LIST` }],
     }),
   }),
 });
