@@ -46,6 +46,19 @@ const getMovies = async (req, res) => {
     });
 };
 
+const getMovieById = async (req, res) => {
+  const id = req.params.id;
+  await Movie.findOne({ id })
+    .then(async (result) => {
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ msg: error });
+    });
+};
+
 module.exports = {
   getMovies,
+  getMovieById,
 };

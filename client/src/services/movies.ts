@@ -23,7 +23,9 @@ export const moviesApi = createApi({
       { page: number; sort: string }
     >({
       query: ({ page, sort }) =>
-        `movies?page=${page ?? 1}&limit=10&sort=${sort}&fields=title&fields=release_date&fields=revenue`,
+        `movies?page=${
+          page ?? 1
+        }&limit=10&sort=${sort}&fields=title&fields=release_date&fields=revenue`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
@@ -43,7 +45,14 @@ export const moviesApi = createApi({
       query: ({ sort, year }) =>
         `movies?page=1&limit=10&sort=${sort}${year ? `&year=${year}` : ""}`,
     }),
+    getMovieById: builder.query<Movie, number>({
+      query: (id) => `movies/${id}`,
+    }),
   }),
 });
 
-export const { useListMoviesQuery, useListTop10MoviesQuery } = moviesApi;
+export const {
+  useListMoviesQuery,
+  useListTop10MoviesQuery,
+  useGetMovieByIdQuery,
+} = moviesApi;

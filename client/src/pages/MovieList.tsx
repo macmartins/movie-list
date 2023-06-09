@@ -213,7 +213,7 @@ export default function MovieList() {
         sx={{
           display: "flex",
           gap: 1,
-          pb: 2
+          pb: 2,
         }}
       >
         <CustomToggleButton
@@ -228,7 +228,7 @@ export default function MovieList() {
           selected={(sort.includes("revenue") && !!year) || isSelectYearOpen}
           onClick={handleTop10RevenueByYearClick}
         >
-          Top 10 Revenue {year ?? 'by Year'}
+          Top 10 Revenue {year ?? "by Year"}
         </CustomToggleButton>
       </Box>
       <TableContainer ref={tableEl} sx={{ maxHeight: "40vh" }}>
