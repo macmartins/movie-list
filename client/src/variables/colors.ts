@@ -8,4 +8,5 @@ export const COLORS = {
   buttonBorder: "#78849e66",
   buttonText: "#78849e",
   buttonTextOpacity: "#78849EB9",
+  buttonToggled: "#00BAFF",
 };

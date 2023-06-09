@@ -32,6 +32,19 @@ const CustomTableCell = styled(TableCell)({
   paddingBottom: 0,
 });
 
+const CustomToggleButton = styled(ToggleButton)({
+  border: `1px solid ${COLORS.buttonBorder}`,
+  color: COLORS.buttonText,
+  textTransform: "none",
+  fontSize: 12,
+  fontFamily: "'Robot Light', sans-serif",
+  borderRadius: 20,
+  lineHeight: 1,
+  "&.Mui-selected,&.Mui-selected:hover": {
+    backgroundColor: COLORS.buttonToggled,
+  },
+});
+
 export default function MovieList() {
   const tableEl = useRef<HTMLDivElement | null>(null);
   const [distanceBottom, setDistanceBottom] = useState(0);
@@ -196,20 +209,28 @@ export default function MovieList() {
           </Box>
         </Popover>
       </Backdrop>
-      <ToggleButton
-        value="top10Revenue"
-        selected={sort.includes("revenue") && !year}
-        onClick={handleTop10RevenueClick}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 1,
+          pb: 2
+        }}
       >
-        Top 10 Revenue
-      </ToggleButton>
-      <ToggleButton
-        value="top10RevenueByYear"
-        selected={sort.includes("revenue") && !!year}
-        onClick={handleTop10RevenueByYearClick}
-      >
-        Top 10 Revenue by Year
-      </ToggleButton>
+        <CustomToggleButton
+          value="top10Revenue"
+          selected={sort.includes("revenue") && !year}
+          onClick={handleTop10RevenueClick}
+        >
+          Top 10 Revenue
+        </CustomToggleButton>
+        <CustomToggleButton
+          value="top10RevenueByYear"
+          selected={(sort.includes("revenue") && !!year) || isSelectYearOpen}
+          onClick={handleTop10RevenueByYearClick}
+        >
+          Top 10 Revenue {year ?? 'by Year'}
+        </CustomToggleButton>
+      </Box>
       <TableContainer ref={tableEl} sx={{ maxHeight: "40vh" }}>
         <Table stickyHeader>
           <TableHead>
