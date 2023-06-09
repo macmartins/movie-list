@@ -23,7 +23,7 @@ export const moviesApi = createApi({
       { page: number; sort: string }
     >({
       query: ({ page, sort }) =>
-        `movies?page=${page ?? 1}&limit=10&sort=${sort}`,
+        `movies?page=${page ?? 1}&limit=10&sort=${sort}&fields=title&fields=release_date&fields=revenue`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },

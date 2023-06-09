@@ -23,10 +23,12 @@ const getMovies = async (req, res) => {
   const limit = req.query.limit;
   const page = req.query.page;
   const year = req.query.year;
+  const fields = req.query.fields;
   const sort = handleQuerySort(req.query.sort);
   await Movie.find(
     year ? { release_date: { $regex: year, $options: "i" } } : {}
   )
+    .select(fields ? fields.join(" ") : null)
     .limit(limit * 1)
     .skip((page - 1) * limit)
     .sort(sort)
