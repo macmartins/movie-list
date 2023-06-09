@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-interface Movie {
+export interface Movie {
   id: number;
   title: string;
   revenue: number;
@@ -20,23 +20,26 @@ export const moviesApi = createApi({
   endpoints: (builder) => ({
     listMovies: builder.query<
       ListResponse<Movie>,
-      { page: number; sort: string; reset?: boolean }
+      { page: number; sort: string }
     >({
       query: ({ page, sort }) =>
         `movies?page=${page ?? 1}&limit=10&sort=${sort}`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
-      merge: (currentCache, newItems, { arg: { reset } }) => {
-        if (reset) currentCache.result = [];
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
         currentCache.result.push(...newItems.result);
       },
+      // Refetch when the page arg changes
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
-      providesTags: () => [{ type: "Movies", id: `PARTIAL-LIST` }],
+    }),
+    listTop10Movies: builder.query<ListResponse<Movie>, { sort: string }>({
+      query: ({ sort }) => `movies?page=1&limit=10&sort=${sort}`,
     }),
   }),
 });
 
-export const { useListMoviesQuery } = moviesApi;
+export const { useListMoviesQuery, useListTop10MoviesQuery } = moviesApi;

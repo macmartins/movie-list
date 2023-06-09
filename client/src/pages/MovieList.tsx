@@ -13,7 +13,10 @@ import {
 import { styled, useTheme } from "@mui/material/styles";
 import { COLORS } from "../variables/colors";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { useListMoviesQuery } from "../services/movies";
+import {
+  useListMoviesQuery,
+  useListTop10MoviesQuery,
+} from "../services/movies";
 
 const CustomTableCell = styled(TableCell)({
   color: COLORS.tableHead,
@@ -26,12 +29,21 @@ export default function MovieList() {
   const [distanceBottom, setDistanceBottom] = useState(0);
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState("title:1");
-  const [reset, setReset] = useState(false);
-  const { data: movies, isFetching } = useListMoviesQuery({
+  // Normal listing
+  const { data: allMovies, isFetching } = useListMoviesQuery({
     page,
-    sort,
-    reset,
+    sort: "title:1",
   });
+
+  // Top 10
+  const { data: top10RevenueMovies } = useListTop10MoviesQuery(
+    {
+      sort,
+    },
+    { skip: sort.includes("title") }
+  );
+
+  const movies = sort.includes("title") ? allMovies : top10RevenueMovies;
 
   const theme = useTheme();
 
@@ -50,7 +62,6 @@ export default function MovieList() {
         !isFetching
       ) {
         setPage(page + 1);
-        setReset(false);
       }
     }
     // Add the ignore because there's a bug where if page is a dependency, it will setPage x2
@@ -66,8 +77,6 @@ export default function MovieList() {
   }, [scrollListener]);
 
   const handleTop10RevenueClick = () => {
-    setReset(true);
-    setPage(1);
     setSort("revenue:-1");
   };
 
@@ -91,8 +100,6 @@ export default function MovieList() {
       <Button onClick={handleTop10RevenueClick}>Top 10 Revenue</Button>
       <Button
         onClick={() => {
-          setReset(true);
-          setPage(1);
           setSort("title:1");
         }}
       >
