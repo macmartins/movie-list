@@ -36,8 +36,12 @@ export const moviesApi = createApi({
         return currentArg !== previousArg;
       },
     }),
-    listTop10Movies: builder.query<ListResponse<Movie>, { sort: string }>({
-      query: ({ sort }) => `movies?page=1&limit=10&sort=${sort}`,
+    listTop10Movies: builder.query<
+      ListResponse<Movie>,
+      { sort: string; year?: number }
+    >({
+      query: ({ sort, year }) =>
+        `movies?page=1&limit=10&sort=${sort}${year ? `&year=${year}` : ""}`,
     }),
   }),
 });

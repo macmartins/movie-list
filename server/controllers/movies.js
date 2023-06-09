@@ -22,20 +22,21 @@ const handleQuerySort = (query) => {
 const getMovies = async (req, res) => {
   const limit = req.query.limit;
   const page = req.query.page;
+  const year = req.query.year;
   const sort = handleQuerySort(req.query.sort);
-  await Movie.find({})
+  await Movie.find(
+    year ? { release_date: { $regex: year, $options: "i" } } : {}
+  )
     .limit(limit * 1)
     .skip((page - 1) * limit)
     .sort(sort)
     .then(async (result) => {
       const count = await Movie.countDocuments();
-      res
-        .status(200)
-        .json({
-          result,
-          totalPages: Math.ceil(count / limit),
-          currentPage: page,
-        });
+      res.status(200).json({
+        result,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+      });
     })
     .catch((error) => {
       console.log(error);

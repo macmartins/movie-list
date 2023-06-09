@@ -8,13 +8,19 @@ import {
   TableCell,
   TableBody,
   CircularProgress,
-  Button,
   Backdrop,
   Popover,
+  ToggleButton,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { COLORS } from "../variables/colors";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import {
+  MouseEvent,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   useListMoviesQuery,
   useListTop10MoviesQuery,
@@ -33,7 +39,7 @@ export default function MovieList() {
   const [sort, setSort] = useState("title:1");
   const [year, setYear] = useState<number>();
   const [isSelectYearOpen, setIsSelectYearOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   // Normal listing
   const { data: allMovies, isFetching } = useListMoviesQuery({
     page,
@@ -44,6 +50,7 @@ export default function MovieList() {
   const { data: top10RevenueMovies } = useListTop10MoviesQuery(
     {
       sort,
+      year,
     },
     { skip: sort.includes("title") }
   );
@@ -81,18 +88,29 @@ export default function MovieList() {
     };
   }, [scrollListener]);
 
-  const handleTop10RevenueClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setSort("revenue:-1");
-    setIsSelectYearOpen(true);
-    setAnchorEl(event.currentTarget);
+  const handleTop10RevenueClick = () => {
+    if (sort.includes("revenue")) {
+      setSort("title:1");
+    } else {
+      setSort("revenue:-1");
+    }
+    setYear(undefined);
   };
 
-  const getYears = (startYear = 1980) => {
+  const handleTop10RevenueByYearClick = (event: MouseEvent<HTMLElement>) => {
+    if (!year) {
+      setIsSelectYearOpen(true);
+      setAnchorEl(event.currentTarget);
+    } else {
+      setSort("title:1");
+      setYear(undefined);
+    }
+  };
+
+  const getYears = (startYear = 1990) => {
     const currentYear = new Date().getFullYear(),
       years = [];
-    startYear = startYear || 1980;
+    startYear = startYear || 1990;
     while (startYear <= currentYear) {
       years.push(startYear++);
     }
@@ -152,35 +170,46 @@ export default function MovieList() {
             >
               Select a year
             </Typography>
-            {getYears(1900).reverse().map((year) => (
-              <Typography
-                variant="body1"
-                sx={{
-                  color: COLORS.tableText,
-                  fontSize: 20,
-                  fontFamily: "'Roboto Medium', sans-serif",
-                  cursor: "pointer",
-                  lineHeight: 1.8,
-                  "&:hover": {
-                    backgroundColor: COLORS.tableSeparator,
-                  },
-                }}
-                onClick={() => setYear(year)}
-              >
-                {year}
-              </Typography>
-            ))}
+            {getYears()
+              .reverse()
+              .map((year) => (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: COLORS.tableText,
+                    fontSize: 20,
+                    fontFamily: "'Roboto Medium', sans-serif",
+                    cursor: "pointer",
+                    lineHeight: 1.8,
+                    "&:hover": {
+                      backgroundColor: COLORS.tableSeparator,
+                    },
+                  }}
+                  onClick={() => {
+                    setYear(year);
+                    setSort("revenue:-1");
+                  }}
+                >
+                  {year}
+                </Typography>
+              ))}
           </Box>
         </Popover>
       </Backdrop>
-      <Button onClick={handleTop10RevenueClick}>Top 10 Revenue</Button>
-      <Button
-        onClick={() => {
-          setSort("title:1");
-        }}
+      <ToggleButton
+        value="top10Revenue"
+        selected={sort.includes("revenue") && !year}
+        onClick={handleTop10RevenueClick}
+      >
+        Top 10 Revenue
+      </ToggleButton>
+      <ToggleButton
+        value="top10RevenueByYear"
+        selected={sort.includes("revenue") && !!year}
+        onClick={handleTop10RevenueByYearClick}
       >
         Top 10 Revenue by Year
-      </Button>
+      </ToggleButton>
       <TableContainer ref={tableEl} sx={{ maxHeight: "40vh" }}>
         <Table stickyHeader>
           <TableHead>
