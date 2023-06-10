@@ -9,4 +9,6 @@ export const COLORS = {
   buttonText: "#78849e",
   buttonTextOpacity: "#78849EB9",
   buttonToggled: "#00BAFF",
+  detailsTitle: "#164E78",
+  titleUnderline: "#21B3CF"
 };

@@ -11,6 +11,9 @@ import {
   Backdrop,
   Popover,
   ToggleButton,
+  IconButton,
+  Modal,
+  Divider,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { COLORS } from "../variables/colors";
@@ -25,6 +28,7 @@ import {
   useListMoviesQuery,
   useListTop10MoviesQuery,
 } from "../services/movies";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const CustomTableCell = styled(TableCell)({
   color: COLORS.tableHead,
@@ -260,12 +264,52 @@ export default function MovieList() {
                 <TableCell component="th" scope="row">
                   ${row.revenue?.toLocaleString("en-US")}
                 </TableCell>
-                <TableCell component="th" scope="row"></TableCell>
+                <TableCell component="th" scope="row">
+                  <IconButton>
+                    <VisibilityIcon
+                      sx={{
+                        color: COLORS.tableSeparator,
+                      }}
+                    />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <Modal open={true} sx={{ p: 2, color: "white" }}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            minWidth: 750,
+            bgcolor: COLORS.white,
+            boxShadow: 24,
+            py: "30px",
+            px: "60px",
+          }}
+        >
+          <Typography
+            variant="h4"
+            sx={{
+              color: COLORS.detailsTitle,
+            }}
+          >
+            Title
+          </Typography>
+          <Divider
+            sx={{
+              width: 50,
+              borderColor: COLORS.titleUnderline,
+              borderWidth: 2,
+              mt: 3,
+            }}
+          />
+        </Box>
+      </Modal>
     </Box>
   );
 }
