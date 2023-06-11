@@ -1,0 +1,95 @@
+import {
+  Box,
+  Divider,
+  Grid,
+  IconButton,
+  Modal,
+  Typography,
+} from "@mui/material";
+import COLORS from "../../variables/colors";
+import FieldSection from "../DetailsField/DetailsField";
+import { useGetMovieByIdQuery } from "../../services/movies";
+import CloseIcon from "@mui/icons-material/Close";
+import * as styles from "./styles";
+
+const MovieDetails = ({ id, onClose }: { id: number; onClose: () => void }) => {
+  const { data: movie } = useGetMovieByIdQuery(id);
+
+  return (
+    <Modal open={true} sx={{ p: 2, color: "white" }}>
+      <Box sx={styles.modal}>
+        <Box
+          sx={{
+            position: "absolute",
+            right: 30,
+            cursor: "pointer",
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            color: COLORS.closeIcon,
+            "& .MuiSvgIcon-root": {
+              color: COLORS.closeIcon,
+            },
+            "&:hover": {
+              flexDirection: "row-reverse",
+              color: COLORS.appBar,
+              "& .MuiSvgIcon-root": {
+                color: COLORS.appBar,
+              },
+            },
+          }}
+        >
+          <IconButton disableRipple onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+          <Typography>Close</Typography>
+        </Box>
+        <Typography
+          variant="h4"
+          sx={{
+            color: COLORS.detailsTitle,
+          }}
+        >
+          {movie?.title}
+        </Typography>
+        <Divider sx={styles.divider} />
+        <FieldSection
+          title="Year"
+          value={new Date(movie?.release_date || "").getFullYear()}
+        />
+        <FieldSection title="Genre" value={movie?.genres.join(", ") || "---"} />
+        <FieldSection title="Description" value={movie?.overview} />
+        <Grid container columnSpacing={5}>
+          <Grid item xs={12} lg={2}>
+            <FieldSection
+              title="Director"
+              value={movie?.director}
+              valueSX={{
+                color: COLORS.buttonToggled,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} lg={10}>
+            <FieldSection
+              title="Actors"
+              value={movie?.actors?.slice(0, 4).join("     ") || "-"}
+              valueSX={{
+                color: COLORS.buttonToggled,
+              }}
+            />
+          </Grid>
+        </Grid>
+        <FieldSection title="Runtime" value={`${movie?.runtime} mins`} />
+        <FieldSection title="Rating" value={movie?.vote_average} />
+        <FieldSection title="Votes" value={movie?.vote_count} />
+        <FieldSection
+          title="Revenue"
+          value={`$${movie?.revenue.toLocaleString("en-US")}`}
+        />
+        <FieldSection title="Metascore" value={movie?.metascore} />
+      </Box>
+    </Modal>
+  );
+};
+
+export default MovieDetails;

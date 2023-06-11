@@ -5,6 +5,15 @@ export interface Movie {
   title: string;
   revenue: number;
   release_date: string;
+  rating: number;
+  genres: string[];
+  overview: string;
+  director: string;
+  actors: string[];
+  runtime: number;
+  vote_average: number;
+  vote_count: number;
+  metascore: number;
 }
 
 interface ListResponse<T> {
@@ -19,13 +28,13 @@ export const moviesApi = createApi({
   tagTypes: ["Movies"],
   endpoints: (builder) => ({
     listMovies: builder.query<
-      ListResponse<Movie>,
+      ListResponse<Pick<Movie, "id" | "title" | "release_date" | "revenue">>,
       { page: number; sort: string }
     >({
       query: ({ page, sort }) =>
         `movies?page=${
           page ?? 1
-        }&limit=10&sort=${sort}&fields=title&fields=release_date&fields=revenue`,
+        }&limit=10&sort=${sort}&fields=id&fields=title&fields=release_date&fields=revenue`,
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },

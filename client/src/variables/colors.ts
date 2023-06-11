@@ -1,4 +1,4 @@
-export const COLORS = {
+export default {
   white: "#ffffff",
   tableText: "#536b7a",
   tableSeparator: "#9aaebb",
@@ -10,5 +10,6 @@ export const COLORS = {
   buttonTextOpacity: "#78849EB9",
   buttonToggled: "#00BAFF",
   detailsTitle: "#164E78",
-  titleUnderline: "#21B3CF"
+  titleUnderline: "#21B3CF",
+  closeIcon: "#718FA2",
 };

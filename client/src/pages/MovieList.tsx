@@ -12,14 +12,13 @@ import {
   Popover,
   ToggleButton,
   IconButton,
-  Modal,
-  Divider,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
-import { COLORS } from "../variables/colors";
+import COLORS from "../variables/colors";
 import {
   MouseEvent,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -29,6 +28,9 @@ import {
   useListTop10MoviesQuery,
 } from "../services/movies";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import FONTS from "../variables/fonts";
+import MovieDetails from "../components/MovieDetails/MovieDetails";
+import RefreshIcon from "../assets/refresh.svg";
 
 const CustomTableCell = styled(TableCell)({
   color: COLORS.tableHead,
@@ -55,10 +57,15 @@ export default function MovieList() {
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState("title:1");
   const [year, setYear] = useState<number>();
+  const [selectedMovieID, setSelectedMovieID] = useState<number>();
   const [isSelectYearOpen, setIsSelectYearOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   // Normal listing
-  const { data: allMovies, isFetching } = useListMoviesQuery({
+  const {
+    data: allMovies,
+    isFetching,
+    isLoading,
+  } = useListMoviesQuery({
     page,
     sort: "title:1",
   });
@@ -104,6 +111,22 @@ export default function MovieList() {
       tableRef?.removeEventListener("scroll", scrollListener);
     };
   }, [scrollListener]);
+
+  useEffect(() => {
+    const scrollHeight = tableEl?.current?.scrollHeight;
+    const clientHeight = tableEl?.current?.clientHeight;
+    if (
+      scrollHeight &&
+      clientHeight &&
+      !(scrollHeight > clientHeight) &&
+      !isFetching &&
+      !isLoading
+    ) {
+      setPage(page + 1);
+    }
+    // Adding the 'page' dependency will cause it to run immediately and skip a page
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching, isLoading]);
 
   const handleTop10RevenueClick = () => {
     if (sort.includes("revenue")) {
@@ -191,11 +214,12 @@ export default function MovieList() {
               .reverse()
               .map((year) => (
                 <Typography
+                  key={`year-${year}`}
                   variant="body1"
                   sx={{
                     color: COLORS.tableText,
                     fontSize: 20,
-                    fontFamily: "'Roboto Medium', sans-serif",
+                    fontFamily: FONTS.medium,
                     cursor: "pointer",
                     lineHeight: 1.8,
                     "&:hover": {
@@ -234,8 +258,22 @@ export default function MovieList() {
         >
           Top 10 Revenue {year ?? "by Year"}
         </CustomToggleButton>
+        {!sort.includes("title") ? (
+          <Box
+            component="img"
+            src={RefreshIcon}
+            alt="Reset"
+            sx={{
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setSort("title:1");
+              setYear(undefined);
+            }}
+          />
+        ) : null}
       </Box>
-      <TableContainer ref={tableEl} sx={{ maxHeight: "40vh" }}>
+      <TableContainer ref={tableEl} sx={{ maxHeight: "70vh" }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -265,7 +303,7 @@ export default function MovieList() {
                   ${row.revenue?.toLocaleString("en-US")}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  <IconButton>
+                  <IconButton onClick={() => setSelectedMovieID(row.id)}>
                     <VisibilityIcon
                       sx={{
                         color: COLORS.tableSeparator,
@@ -278,38 +316,12 @@ export default function MovieList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Modal open={true} sx={{ p: 2, color: "white" }}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            minWidth: 750,
-            bgcolor: COLORS.white,
-            boxShadow: 24,
-            py: "30px",
-            px: "60px",
-          }}
-        >
-          <Typography
-            variant="h4"
-            sx={{
-              color: COLORS.detailsTitle,
-            }}
-          >
-            Title
-          </Typography>
-          <Divider
-            sx={{
-              width: 50,
-              borderColor: COLORS.titleUnderline,
-              borderWidth: 2,
-              mt: 3,
-            }}
-          />
-        </Box>
-      </Modal>
+      {selectedMovieID ? (
+        <MovieDetails
+          id={selectedMovieID}
+          onClose={() => setSelectedMovieID(undefined)}
+        />
+      ) : null}
     </Box>
   );
 }

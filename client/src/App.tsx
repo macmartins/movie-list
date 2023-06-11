@@ -14,7 +14,7 @@ function App() {
           <Box
             sx={{
               margin: "0 auto",
-              maxWidth: 1280,
+              maxWidth: "70vw",
             }}
           >
             <MovieList />
