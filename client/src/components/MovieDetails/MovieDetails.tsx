@@ -6,43 +6,24 @@ import {
   Modal,
   Typography,
 } from "@mui/material";
-import COLORS from "../../variables/colors";
 import FieldSection from "../DetailsField/DetailsField";
 import { useGetMovieByIdQuery } from "../../services/movies";
 import CloseIcon from "@mui/icons-material/Close";
 import * as styles from "./styles";
+import COLORS from "../../constants/colors";
+import STRINGS from "../../constants/strings";
 
 const MovieDetails = ({ id, onClose }: { id: number; onClose: () => void }) => {
   const { data: movie } = useGetMovieByIdQuery(id);
 
   return (
-    <Modal open={true} sx={{ p: 2, color: "white" }}>
-      <Box sx={styles.modal}>
-        <Box
-          sx={{
-            position: "absolute",
-            right: 30,
-            cursor: "pointer",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
-            color: COLORS.closeIcon,
-            "& .MuiSvgIcon-root": {
-              color: COLORS.closeIcon,
-            },
-            "&:hover": {
-              flexDirection: "row-reverse",
-              color: COLORS.appBar,
-              "& .MuiSvgIcon-root": {
-                color: COLORS.appBar,
-              },
-            },
-          }}
-        >
+    <Modal open={true} sx={styles.modal}>
+      <Box sx={styles.content}>
+        <Box sx={styles.closeBtnContainer}>
           <IconButton disableRipple onClick={onClose}>
             <CloseIcon />
           </IconButton>
-          <Typography>Close</Typography>
+          <Typography>{STRINGS.close}</Typography>
         </Box>
         <Typography
           variant="h4"

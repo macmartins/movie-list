@@ -1,5 +1,5 @@
 import { Box, ThemeProvider } from "@mui/material";
-import MovieList from "./pages/MovieList";
+import MovieList from "./pages/MovieList/MovieList";
 import theme from "./theme";
 import AppBar from "./components/AppBar/AppBar";
 import { Provider } from "react-redux";

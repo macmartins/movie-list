@@ -1,26 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-export interface Movie {
-  id: number;
-  title: string;
-  revenue: number;
-  release_date: string;
-  rating: number;
-  genres: string[];
-  overview: string;
-  director: string;
-  actors: string[];
-  runtime: number;
-  vote_average: number;
-  vote_count: number;
-  metascore: number;
-}
-
-interface ListResponse<T> {
-  currentPage: number;
-  totalPages: number;
-  result: T[];
-}
+import Movie from "../interfaces/movies.interface";
+import ListResponse from "../interfaces/listResponse.interface";
 
 export const moviesApi = createApi({
   reducerPath: "moviesApi",
