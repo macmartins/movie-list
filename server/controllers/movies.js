@@ -1,6 +1,4 @@
 const Movie = require("../models/Movie");
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const handleQuerySort = (query) => {
   try {
