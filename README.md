@@ -22,8 +22,9 @@ To setup this application, let's first clone the repository using the following 
 After we have a local copy, let's handle the server setup:
 
 1. Open a CLI window, navigate to the server folder using: `cd server`
-1. Then, install the server dependencies using: `npm install`
-2. Then to run the server do: `npm start`
+2. Then, install the server dependencies using: `npm install`
+3. Then, copy the `.env.local` file as `.env` so the environment variables are setup
+4. Then to run the server do: `npm start`
 
 After a few seconds, you should see something like this:
 
@@ -37,7 +38,8 @@ Last but not least, let's handle the client setup:
 
 1. Open another CLI window, navigate to the client folder using: `cd client`
 2. Then, install the app dependencies using: `npm install`
-3. Lastly, run the client app using: `npm start`
+3. Then, copy the `.env.local` file as `.env` so the environment variables are setup
+4. Lastly, run the client app using: `npm start`
 
 After a few seconds, you should see something like this:
 ![Alt text](/assets/images/clientCLI.png)
