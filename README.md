@@ -21,7 +21,8 @@ To setup this application, let's first clone the repository using the following 
 
 After we have a local copy, let's handle the server setup:
 
-1. Opening any CLI in the root of the project, install the server dependencies using: `npm install`
+1. Open a CLI window, navigate to the server folder using: `cd server`
+1. Then, install the server dependencies using: `npm install`
 2. Then to run the server do: `npm start`
 
 After a few seconds, you should see something like this:
