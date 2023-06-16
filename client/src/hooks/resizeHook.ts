@@ -9,6 +9,7 @@ export default function useScrollResize({
   tableEl,
   isFetching,
   isLoading,
+  isError,
 }: {
   movies?: ListResponse<
     Pick<Movie, "id" | "title" | "release_date" | "revenue">
@@ -16,6 +17,7 @@ export default function useScrollResize({
   tableEl: React.MutableRefObject<HTMLDivElement | null>;
   isFetching: boolean;
   isLoading: boolean;
+  isError: boolean;
 }) {
   const dispatch = useAppDispatch();
   const page = useAppSelector(selectPage);
@@ -36,6 +38,7 @@ export default function useScrollResize({
         sort.includes("title") &&
         !isFetching
       ) {
+        console.log("page set + 1");
         dispatch(setPage(page + 1));
       }
     }
@@ -60,7 +63,8 @@ export default function useScrollResize({
       clientHeight &&
       !(scrollHeight > clientHeight) &&
       !isFetching &&
-      !isLoading
+      !isLoading &&
+      !isError
     ) {
       dispatch(setPage(page + 1));
     }

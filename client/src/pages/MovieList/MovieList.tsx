@@ -42,6 +42,7 @@ export default function MovieList() {
     data: allMovies,
     isFetching,
     isLoading,
+    isError,
   } = useListMoviesQuery({
     page,
     sort: SORT.TITLE,
@@ -54,7 +55,7 @@ export default function MovieList() {
     },
     { skip: isTitleSort }
   );
-  useScrollResize({ movies: allMovies, isFetching, isLoading, tableEl });
+  useScrollResize({ movies: allMovies, isFetching, isLoading, tableEl, isError });
   const theme = useTheme();
 
   const movies = isTitleSort ? allMovies : top10RevenueMovies;
