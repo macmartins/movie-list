@@ -45,11 +45,12 @@ const getMovieById = async (req, res) => {
   const id = req.params.id;
   await Movie.findOne({ id })
     .then(async (result) => {
+      if (!result) throw { msg: "Movie not found!", code: 404 };
       res.status(200).json(result);
     })
     .catch((error) => {
       console.log(error);
-      res.status(500).json({ msg: error });
+      res.status(error.code ?? 500).json({ msg: error.msg ?? error });
     });
 };
 
