@@ -36,7 +36,7 @@ const MovieDetails = ({ id, onClose }: { id: number; onClose: () => void }) => {
         <Divider sx={styles.divider} />
         <FieldSection
           title="Year"
-          value={new Date(movie?.release_date || "").getFullYear()}
+          value={new Date(movie?.release_date || new Date()).getFullYear()}
         />
         <FieldSection title="Genre" value={movie?.genres.join(", ") || "---"} />
         <FieldSection title="Description" value={movie?.overview} />

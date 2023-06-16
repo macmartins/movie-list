@@ -34,7 +34,7 @@ export default function DataTable({
         <TableHead>
           <TableRow>
             {columns.map((c) => (
-              <CustomMovieTableCell>{c}</CustomMovieTableCell>
+              <CustomMovieTableCell key={`column-${c}`}>{c}</CustomMovieTableCell>
             ))}
           </TableRow>
         </TableHead>
