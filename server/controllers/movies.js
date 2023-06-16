@@ -18,10 +18,7 @@ const handleQuerySort = (query) => {
 };
 
 const getMovies = async (req, res) => {
-  const limit = req.query.limit;
-  const page = req.query.page;
-  const year = req.query.year;
-  const fields = req.query.fields;
+  const { limit, page, year, fields } = req.query;
   const sort = handleQuerySort(req.query.sort);
   await Movie.find(
     year ? { release_date: { $regex: year, $options: "i" } } : {}
