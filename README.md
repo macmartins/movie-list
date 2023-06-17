@@ -38,7 +38,7 @@ It was done with the intent to deploy publicly. You can see access it <a href="h
 
 ### **Client**
 **Note**: This section can be skipped if you don't want a seperate CLI for the client, however whenever you change something it won't update it since the hosted application is the most recent build (Static).<br>
-I recommend having 2 CLI's for the server and client, guaranteeing you're running are at runtime.<br><br>
+I recommend having 2 CLI's for the server and client, guaranteeing you're running at runtime.<br><br>
 Last but not least, let's handle the client setup:
 
 1. Open another CLI window, navigate to the client folder using: `cd client`
