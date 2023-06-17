@@ -34,7 +34,7 @@ Nice! The server is working! You should be able to access the server in the loca
 
 **Note**: At this point, you can also access <a href="http:localhost:3001" target="_blank">http:localhost:3001</a> to go to the application.<br>
 This is because the server is hosting the latest build of the app.<br>
-It was done with the intent to deploy publicly. You can see access it <a href="https://movie-list-api-03bn.onrender.com/" target="_blank">here</a>
+It was done with the intent to deploy publicly. You can see access it <a href="https://movie-list-challenge.onrender.com" target="_blank">here</a>
 
 ### **Client**
 **Note**: This section can be skipped if you don't want a seperate CLI for the client, however whenever you change something it won't update it since the hosted application is the most recent build (Static).<br>
