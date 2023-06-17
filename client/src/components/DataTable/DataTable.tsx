@@ -2,27 +2,20 @@ import {
   IconButton,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
 } from "@mui/material";
-import { MutableRefObject } from "react";
 import CustomMovieTableCell from "../CustomMovieTableCell";
 import columns from "./columns";
-import Movie from "../../interfaces/movies.interface";
-import { useAppDispatch } from "../../hooks/storeHooks";
-import { setSelectedMovieID } from "../../store/movies/moviesSlice";
+import { useAppDispatch } from "@/hooks/storeHooks";
+import { setSelectedMovieID } from "@/store/movies/moviesSlice";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import COLORS from "../../constants/colors";
+import COLORS from "@/constants/colors";
+import CustomMovieTableBodyCell from "../CustomMovieTableBodyCell";
+import DataTableProps from "@/interfaces/dataTableProps.interface";
 
-export default function DataTable({
-  data,
-  tableEl,
-}: {
-  data?: Pick<Movie, "title" | "id" | "release_date" | "revenue">[];
-  tableEl: MutableRefObject<HTMLDivElement | null>;
-}) {
+export default function DataTable({ data, tableEl }: DataTableProps) {
   const dispatch = useAppDispatch();
 
   const handleEyeClick = (id: number) => {
@@ -33,8 +26,16 @@ export default function DataTable({
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {columns.map((c) => (
-              <CustomMovieTableCell key={`column-${c}`}>{c}</CustomMovieTableCell>
+            {columns.map((c, i) => (
+              <CustomMovieTableCell
+                width={c.width}
+                key={`column-${c.label}`}
+                sx={{
+                  textAlign: i === 0 ? "center" : "left",
+                }}
+              >
+                {c.label.toUpperCase()}
+              </CustomMovieTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -44,19 +45,21 @@ export default function DataTable({
               key={`movie-${i}`}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <CustomMovieTableBodyCell
+                sx={{
+                  textAlign: "center",
+                }}
+              >
                 {i + 1}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.title}
-              </TableCell>
-              <TableCell component="th" scope="row">
+              </CustomMovieTableBodyCell>
+              <CustomMovieTableBodyCell>{row.title}</CustomMovieTableBodyCell>
+              <CustomMovieTableBodyCell>
                 {new Date(row.release_date).getFullYear()}
-              </TableCell>
-              <TableCell component="th" scope="row">
+              </CustomMovieTableBodyCell>
+              <CustomMovieTableBodyCell>
                 ${row.revenue?.toLocaleString("en-US")}
-              </TableCell>
-              <TableCell component="th" scope="row">
+              </CustomMovieTableBodyCell>
+              <CustomMovieTableBodyCell>
                 <IconButton onClick={() => handleEyeClick(row.id)}>
                   <VisibilityIcon
                     sx={{
@@ -64,7 +67,7 @@ export default function DataTable({
                     }}
                   />
                 </IconButton>
-              </TableCell>
+              </CustomMovieTableBodyCell>
             </TableRow>
           ))}
         </TableBody>

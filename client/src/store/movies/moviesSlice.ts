@@ -1,15 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import SORT from "../../enums/sort";
-
-interface MoviesState {
-  page: number;
-  sort: SORT;
-  year?: number;
-  selectedMovieID?: number;
-  isSelectYearModalOpen: boolean;
-}
+import SORT from "@/enums/sort";
+import MoviesState from "@/interfaces/moviesState.interface";
 
 const initialState = {
   page: 1,

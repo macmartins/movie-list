@@ -1,5 +1,5 @@
 import { ToggleButton, styled } from "@mui/material";
-import COLORS from "../constants/colors";
+import COLORS from "@/constants/colors";
 
 const CustomToggleButton = styled(ToggleButton)({
   border: `1px solid ${COLORS.buttonBorder}`,

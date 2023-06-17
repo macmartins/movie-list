@@ -1,6 +1,6 @@
 import { PopoverOrigin, Theme } from "@mui/material";
-import COLORS from "../../constants/colors";
-import FONTS from "../../constants/fonts";
+import COLORS from "@/constants/colors";
+import FONTS from "@/constants/fonts";
 
 export const backdrop = (theme: Theme) => ({
   color: "#fff",

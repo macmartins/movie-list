@@ -2,6 +2,7 @@ export default {
   white: "#ffffff",
   tableText: "#536b7a",
   tableSeparator: "#9aaebb",
+  tableBodySeparator: "rgba(154, 174, 187, 0.4)",
   appBar: "#012433",
   tableHead: "#0b749b",
   title: "#386071",

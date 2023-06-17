@@ -7,13 +7,14 @@ import {
   Typography,
 } from "@mui/material";
 import FieldSection from "../DetailsField/DetailsField";
-import { useGetMovieByIdQuery } from "../../services/movies";
+import { useGetMovieByIdQuery } from "@/services/movies";
 import CloseIcon from "@mui/icons-material/Close";
 import * as styles from "./styles";
-import COLORS from "../../constants/colors";
-import STRINGS from "../../constants/strings";
+import COLORS from "@/constants/colors";
+import STRINGS from "@/constants/strings";
+import MovieDetailsProps from "@/interfaces/movieDetailsProps.interface";
 
-const MovieDetails = ({ id, onClose }: { id: number; onClose: () => void }) => {
+const MovieDetails = ({ id, onClose }: MovieDetailsProps) => {
   const { data: movie } = useGetMovieByIdQuery(id);
 
   return (

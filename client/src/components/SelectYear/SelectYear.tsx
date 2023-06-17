@@ -1,21 +1,18 @@
 import { Backdrop, Box, Popover, Typography } from "@mui/material";
 import * as styles from "./styles";
-import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/storeHooks";
 import {
   selectIsSelectYearModalOpen,
   setIsSelectedYearModalOpen,
   setSort,
   setYear,
-} from "../../store/movies/moviesSlice";
-import { getYears } from "../../helpers/movies";
-import SORT from "../../enums/sort";
-import STRINGS from "../../constants/strings";
+} from "@/store/movies/moviesSlice";
+import { getYears } from "@/helpers/movies";
+import SORT from "@/enums/sort";
+import STRINGS from "@/constants/strings";
+import SelectYearProps from "@/interfaces/selectYearProps.interface";
 
-export default function SelectYear({
-  anchorEl,
-}: {
-  anchorEl: HTMLElement | null;
-}) {
+export default function SelectYear({ anchorEl }: SelectYearProps) {
   const dispatch = useAppDispatch();
 
   const isSelectYearOpen = useAppSelector(selectIsSelectYearModalOpen);

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import Movie from "../interfaces/movies.interface";
-import ListResponse from "../interfaces/listResponse.interface";
+import Movie from "@/interfaces/movie.interface";
+import ListResponse from "@/interfaces/listResponse.interface";
 
 export const moviesApi = createApi({
   reducerPath: "moviesApi",

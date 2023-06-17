@@ -1,26 +1,23 @@
 import { Box } from "@mui/material";
 import * as styles from "./styles";
 import CustomToggleButton from "../CustomToggleButton";
-import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/storeHooks";
 import {
   selectIsSelectYearModalOpen,
   selectSort,
   selectYear,
   setSort,
   setYear,
-} from "../../store/movies/moviesSlice";
-import SORT from "../../enums/sort";
-import { MouseEvent } from "react";
-import RefreshIcon from "../../assets/refresh.svg";
-import STRINGS from "../../constants/strings";
+} from "@/store/movies/moviesSlice";
+import SORT from "@/enums/sort";
+import RefreshIcon from "@/assets/refresh.svg";
+import STRINGS from "@/constants/strings";
+import FilterButtonProps from "@/interfaces/filterButtonProps.interface";
 
 export default function FilterButtons({
   handleTop10RevenueClick,
   handleTop10RevenueByYearClick,
-}: {
-  handleTop10RevenueClick: () => void;
-  handleTop10RevenueByYearClick: (event: MouseEvent<HTMLElement>) => void;
-}) {
+}: FilterButtonProps) {
   const sort = useAppSelector(selectSort);
   const year = useAppSelector(selectYear);
   const isSelectYearOpen = useAppSelector(selectIsSelectYearModalOpen);

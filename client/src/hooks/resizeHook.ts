@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./storeHooks";
-import { selectPage, selectSort, setPage } from "../store/movies/moviesSlice";
-import ListResponse from "../interfaces/listResponse.interface";
-import Movie from "../interfaces/movies.interface";
+import { selectPage, selectSort, setPage } from "@/store/movies/moviesSlice";
+import ResizeHooksProps from "@/interfaces/resizeHookProps.interface";
 
 export default function useScrollResize({
   movies,
@@ -10,15 +9,7 @@ export default function useScrollResize({
   isFetching,
   isLoading,
   isError,
-}: {
-  movies?: ListResponse<
-    Pick<Movie, "id" | "title" | "release_date" | "revenue">
-  >;
-  tableEl: React.MutableRefObject<HTMLDivElement | null>;
-  isFetching: boolean;
-  isLoading: boolean;
-  isError: boolean;
-}) {
+}: ResizeHooksProps) {
   const dispatch = useAppDispatch();
   const page = useAppSelector(selectPage);
   const sort = useAppSelector(selectSort);

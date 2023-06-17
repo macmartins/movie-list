@@ -1,5 +1,5 @@
 import { SxProps } from "@mui/material";
-import COLORS from "../../constants/colors";
+import COLORS from "@/constants/colors";
 import { Theme } from "@emotion/react";
 
 export const modal = { p: 2, color: "white" };

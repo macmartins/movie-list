@@ -1,5 +1,5 @@
-import COLORS from "../../constants/colors";
-import FONTS from "../../constants/fonts";
+import COLORS from "@/constants/colors";
+import FONTS from "@/constants/fonts";
 
 export const fieldTitle = {
   color: COLORS.buttonTextOpacity,

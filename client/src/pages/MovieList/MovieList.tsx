@@ -1,12 +1,7 @@
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { MouseEvent, useMemo, useRef, useState } from "react";
-import {
-  useListMoviesQuery,
-  useListTop10MoviesQuery,
-} from "../../services/movies";
-import MovieDetails from "../../components/MovieDetails/MovieDetails";
-import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/storeHooks";
 import {
   selectPage,
   selectSelectedMovieID,
@@ -16,14 +11,16 @@ import {
   setSelectedMovieID,
   setSort,
   setYear,
-} from "../../store/movies/moviesSlice";
-import useScrollResize from "../../hooks/resizeHook";
-import SORT from "../../enums/sort";
+} from "@/store/movies/moviesSlice";
+import useScrollResize from "@/hooks/resizeHook";
+import SORT from "@/enums/sort";
 import * as styles from "./styles";
-import SelectYear from "../../components/SelectYear/SelectYear";
-import FilterButtons from "../../components/FilterButtons/FilterButtons";
-import DataTable from "../../components/DataTable/DataTable";
-import STRINGS from "../../constants/strings";
+import SelectYear from "@/components/SelectYear/SelectYear";
+import FilterButtons from "@/components/FilterButtons/FilterButtons";
+import DataTable from "@/components/DataTable/DataTable";
+import STRINGS from "@/constants/strings";
+import { useListMoviesQuery, useListTop10MoviesQuery } from "@/services/movies";
+import MovieDetails from "@/components/MovieDetails/MovieDetails";
 
 export default function MovieList() {
   const dispatch = useAppDispatch();
@@ -55,7 +52,13 @@ export default function MovieList() {
     },
     { skip: isTitleSort }
   );
-  useScrollResize({ movies: allMovies, isFetching, isLoading, tableEl, isError });
+  useScrollResize({
+    movies: allMovies,
+    isFetching,
+    isLoading,
+    tableEl,
+    isError,
+  });
   const theme = useTheme();
 
   const movies = isTitleSort ? allMovies : top10RevenueMovies;
